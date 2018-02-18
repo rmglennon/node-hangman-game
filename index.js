@@ -6,19 +6,16 @@ var inquirer = require("inquirer");
 // Prompts the user for each guess and keeps track of the user's remaining guesses
 
 var Word = require("./word.js");
-//var Letter = require("./letter.js");
-
 
 var secretWord = "cat";
 console.log("index secretWord is " + secretWord);
 
 var numGuesses = 3;
+var currentWord = new Word(secretWord);
+currentWord.makeWordStr(secretWord);
 
-function testInput() {
-var currentWord = new Word();
-  currentWord.makeWordStr(secretWord);
-//  var testWord = new Word();
-  //console.log("index currentWord " + word.makeWordStr(currentWord));
+function getInput() {
+
   
   if (numGuesses > 0) {
 inquirer.prompt([
@@ -27,15 +24,14 @@ inquirer.prompt([
     message: "Type a character."
   }
 ]).then(function(userInput) {
-//  var inputLetter = new Letter(userInput.character);
-  //console.log("index inputLetter " + inputLetter);
+
   currentWord.guessLetter(userInput);
   numGuesses--;    
-  testInput();
+  getInput();
 });
 }
 else {
    console.log("No guesses remaining");
  }
 }
-testInput();
+getInput();
