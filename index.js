@@ -4,17 +4,21 @@ var inquirer = require("inquirer");
 // 
 // Randomly selects a word and uses the Word constructor to store it
 // Prompts the user for each guess and keeps track of the user's remaining guesses
-var wordToGuess = "cat";
+
 var Word = require("./word.js");
-var Letter = require("./letter.js");
+//var Letter = require("./letter.js");
+
+
+var secretWord = "cat";
+console.log("index secretWord is " + secretWord);
 
 var numGuesses = 3;
 
 function testInput() {
-var testWord = new Word(wordToGuess);
-  //testWord.makeWordStr(wordToGuess);
+var currentWord = new Word();
+  currentWord.makeWordStr(secretWord);
 //  var testWord = new Word();
-  console.log("index testWord " + testWord.makeWordStr(wordToGuess));
+  //console.log("index currentWord " + word.makeWordStr(currentWord));
   
   if (numGuesses > 0) {
 inquirer.prompt([
@@ -23,8 +27,9 @@ inquirer.prompt([
     message: "Type a character."
   }
 ]).then(function(userInput) {
-  var newLetter = new Letter(userInput.character);
-testWord.guessLetter(newLetter);
+//  var inputLetter = new Letter(userInput.character);
+  //console.log("index inputLetter " + inputLetter);
+  currentWord.guessLetter(userInput);
   numGuesses--;    
   testInput();
 });
