@@ -1,0 +1,20 @@
+{
+  "name": "node-hangman-game",
+  "version": "1.0.0",
+  "description": "Command-line Hangman game built with Node.js and constructors",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rmglennon/node-hangman-game.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rmglennon/node-hangman-game/issues"
+  },
+  "homepage": "https://github.com/rmglennon/node-hangman-game#readme"
+}
