@@ -7,7 +7,16 @@ var inquirer = require("inquirer");
 
 var Word = require("./word.js");
 
-var secretWord = "kitten second";
+// function to choose a random word from the word list array without repeating any during gameplay
+function chooseRandomWord() {
+  
+  var wordList = ["watermelon", "cauliflower", "pumpkin", "spinach", "lettuce", "celery", "broccoli", "strawberries", "mushrooms", "avocado"];
+  for (var i = 0; i < 10; i++) {
+    var randomIndex = Math.floor(Math.random() * wordList.length);
+    var selectedWord = wordList.splice(randomIndex, 1);
+    console.log(selectedWord);
+  }
+}
 
 var numGuesses = 3;
 var currentWord = new Word(secretWord);
@@ -34,4 +43,4 @@ function getInput() {
     console.log("No guesses remaining");
   }
 }
-getInput();
+chooseRandomWord();
