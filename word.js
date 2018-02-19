@@ -24,19 +24,21 @@ var Word = function(currentWord) {
   //A function that takes a character as an argument and calls the guess function on each letter object (the second function defined in Letter.js)
   this.guessLetter = function(character) {
     
-    for (var i = 0; i < this.lettersArray.length; i++) {
-      var letter = new Letter(character);
+    for (var i = 0; i < currentWord.length; i++) {
+      var letterInput = new Letter(currentWord[i]);
       console.log("word guessLetter ran " + i + " times")
       
-      letter.checkCharacter(character);
-
+      letterInput.checkCharacter(character);
+      // if (letterInput.checkCharacter(currentWord[i])) {
+      //     this.lettersArray.push(letter.toString([i]));
+      // }
 
       console.log("word guessLetter character " + JSON.stringify(character));
     }
     
-      if (letter.checkCharacter(character)) {
-              letter.toString();
-      }
+      // if (letterInput.checkCharacter(letterInput)) {
+      //         letterInput.toString();
+      // }
 
 
     console.log("word guessLetter this.lettersArray " + this.lettersArray)

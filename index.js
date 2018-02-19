@@ -6,6 +6,7 @@ var inquirer = require("inquirer");
 // Prompts the user for each guess and keeps track of the user's remaining guesses
 
 var Word = require("./word.js");
+//var Letter = require("./letter.js");
 
 var secretWord = "cat";
 console.log("index secretWord is " + secretWord);
@@ -24,7 +25,10 @@ inquirer.prompt([
     message: "Type a character."
   }
 ]).then(function(userInput) {
-
+  console.log("index currentWord is " + JSON.stringify(currentWord));
+  //var inputLetter = new Letter(userInput);
+  console.log("index userInput " + JSON.stringify(userInput));
+  
   currentWord.guessLetter(userInput);
   numGuesses--;    
   getInput();

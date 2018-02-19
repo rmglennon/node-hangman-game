@@ -22,21 +22,21 @@ var Letter = function(character) {
   }
   
   // A function that takes a character as an argument and checks it against the underlying character, updating the stored boolean value to true if it was guessed correctly
-  this.checkCharacter = function(character) {
-    console.log("letter character " + JSON.stringify(character));
+  this.checkCharacter = function(letterInput) {
+    console.log("letter character " + JSON.stringify(letterInput));
     console.log("letter this.character " + JSON.stringify(this.character));
-    if (character === this.character) {
+    if (letterInput.character === this.character) {
       this.isGuessed = true;
       //this.toString();
       console.log("letter checkCharacter ran: if " + this.isGuessed);
       return true;
     }
-    // else {
-    //   this.isGuessed = false;
-    //   console.log("letter checkCharacter ran: else");
-    //   //this.toString();
-    //   return false;
-    // }
+    else {
+      this.isGuessed = false;
+      console.log("letter checkCharacter ran: else " + this.isGuessed);
+    //  this.toString();
+      return false;
+    }
   }
 }
 
