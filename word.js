@@ -18,7 +18,6 @@ Word.prototype.toString = function() {
     str = str + value.toString(); 
   });
   return str;
-//  return this.lettersArray.join(" ");
 };
 
 
@@ -29,7 +28,6 @@ Word.prototype.guessLetter = function(character) {
       isGuessCorrect = true;
     }
   }
-  //console.log(this.toString());
   return isGuessCorrect;
 };
 

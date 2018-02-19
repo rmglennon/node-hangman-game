@@ -11,28 +11,19 @@ var Letter = function(character) {
 
 Letter.prototype.toString = function() {
   if (this.isGuessed) {
-    //console.log("letter toString ran: if")
-    //console.log(this.character);
     return this.character;
   }
   else {
-    //console.log("letter toString ran: else")
     return "_";
   }
 }
 // A function that takes a character as an argument and checks it against the underlying character, updating the stored boolean value to true if it was guessed correctly
 Letter.prototype.checkCharacter = function(letterInput) {
-//  console.log("letter character " + JSON.stringify(letterInput));
-//  console.log("letter this.character " + JSON.stringify(this.character));
+
   if (letterInput === this.character) {
     this.isGuessed = true;
-    //this.toString();
-//    console.log("letter checkCharacter ran: if " + this.isGuessed);
     return true;
   }
-  //this.isGuessed = false;
-//  console.log("letter checkCharacter ran: else " + this.isGuessed);
-  //  this.toString();
   return false;
   
 }
