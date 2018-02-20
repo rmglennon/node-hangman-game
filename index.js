@@ -5,23 +5,28 @@ var inquirer = require("inquirer");
 // Randomly selects a word and uses the Word constructor to store it
 // Prompts the user for each guess and keeps track of the user's remaining guesses
 
-// TODO: make words already guessed not count toward guess number
-
 var Word = require("./word.js");
-var secretWordIndex = 0;
-var secretWord = chooseRandomWord()[secretWordIndex];
+
+// var wordToGuessIndex = 0;
+// var wordListReordered = [];
+//wordToGuess = wordListReordered[wordToGuessIndex];
+// var wordToGuess = chooseRandomWord()[wordToGuessIndex];
 // set the number of guesses to the the number of characters in the word and two extras for incorrect letters
-//var numGuesses = secretWord.length + 2;
-var currentWord = new Word(secretWord);
-var inAGame = true;
+//var numGuesses = wordToGuess.length + 2;
+//var currentWord = new Word(wordToGuess);
 
-var wrongLetters = [];
-var correctLetters = [];
+var initializePackage = {
+  hasRun: false
+};
 
-// function to choose a random word from the word list array without repeating any, and make a reordered list of words for each game
-function chooseRandomWord() {
+function initializeGame() {
+  
+  console.log("Time to play Hangman! \nFill in all the letters in the word before you run out of guesses! \nThe words are related to produce you can find at a farmer's market.")
+  
+  initializePackage.hasRun = true;
   
   var wordList = ["watermelon", "cauliflower", "pumpkin", "spinach", "lettuce", "celery", "broccoli", "strawberries", "mushrooms", "avocado"];
+  // var wordListReordered = [];
   var wordListReordered = [];
   
   for (var i = 0; i < 10; i++) {
@@ -31,37 +36,40 @@ function chooseRandomWord() {
     wordListReordered.push(selectedWord.join());
     
   }
-  return wordListReordered;
+  initializePackage.wordListReordered = wordListReordered;
+  return initializePackage;
   //console.log(wordListReordered); 
-}
-
-function chooseSecretWord(secretWordIndex) {
-  secretWord = chooseRandomWord()[secretWordIndex];
-  //var currentWord = new Word(secretWord);
-  return secretWord;
-}
-
-function startGame() {
   
-  console.log("Time to play Hangman! \nFill in all the letters in the word before you run out of guesses! \nThe words are related to produce you can find at a farmer's market.")
-  
-  playGame();
+  //var getStarted = playGame(wordListReordered);
 }
 
-function playGame(chooseSecretWord) {
-  numGuesses = secretWord.length + 2;
+function playGame() {
+  //wordListReordered = [];
+  if (!initializePackage.hasRun) {
+    initializeGame();
+  }
+  // TODO: when wordList is null, end game
+  var wordList = initializePackage.wordListReordered.shift();
+  // console.log("my reordered word list is: " + wordList);
+  var wordToGuess = wordList;
+  currentWord = new Word(wordToGuess);
+  console.log("my wordToGuess is " + wordToGuess + "| new wordList array is " + wordList);
+  numGuesses = wordToGuess.length + 2;
   //console.log("Guesses remaining: " + numGuesses);
   console.log("Here is your word: " + "\n" + currentWord.toString());
-  getInput();
+  getInput(currentWord);
 }
 
-function getInput() {
-  
-  // only play if there are guesses left and words left in the array. 
-  // TODO: make this 9 for 9 in the index
-  //   if (numGuesses > 0 && secretWordIndex < 3) {
-  if (inAGame) {
+// function to choose a random word from the word list array without repeating any, and make a reordered list of words for each game
 
+function getInput(currentWord) {
+  console.log("currentWord is " + currentWord);
+  // only play if there are guesses left
+  var wrongLetters = [];
+  var correctLetters = []
+  var keepGuessing = false;
+  
+  if (numGuesses  > 0) {
     
     inquirer.prompt([
       {
@@ -80,8 +88,8 @@ function getInput() {
         }
       }
     ]).then(function(userInput) {
-      currentWord.guessLetter(userInput.character);
       
+      console.log("currentWord is after function " + currentWord);
       // don't count letters that are already used
       if ((correctLetters.indexOf(userInput.character) >= 0) || (wrongLetters.indexOf(userInput.character) >= 0)) {
         console.log("Letter already used. Try again.")
@@ -91,11 +99,16 @@ function getInput() {
       
       // continue checking the letters for a match in the word
       else {
+        // userInput returns an object, so need to send the character property to check if the letter is in the word
+        
+        console.log("currentWord is " + currentWord);
+        currentWord.guessLetter(userInput.character);
+        
         console.log("Guesses remaining: " + numGuesses);
+        
         console.log(currentWord.toString());
         
-        // capture return from function to determine where to put the letters
-
+        // capture return from function to determine where to put the letter in the arrays of already guessed letters.. may not need two arrays here
         var isGuessCorrect = currentWord.guessLetter(userInput.character);
         
         if (isGuessCorrect) {
@@ -107,58 +120,33 @@ function getInput() {
           wrongLetters.push(userInput.character);
           console.log("wrong letters " + wrongLetters);
         }
+        
+        numGuesses--;
+        
+        keepGuessing = true;
+        
       }
-
       
-      // console.log("Guesses remaining: " + numGuesses);
-      // console.log(currentWord.toString());
-      // 
-      // // capture return from function to determine where to put the letters
-      // 
-      // var isGuessCorrect = currentWord.guessLetter(userInput.character);
-      // if (isGuessCorrect) {
-      //   correctLetters.push(userInput.character);
-      //   console.log("correct letters " + correctLetters);
-      // }
-      // else  {
-      //   wrongLetters.push(userInput.character);
-      //   console.log("wrong letters " + wrongLetters);
-      // }
-      // check for existence of _ in the word
-      // if (currentWord.toString().indexOf("_") === -1) {
-      //   console.log("You win!");
-      //   //secretWordIndex++; 
-      //   playGame(chooseSecretWord);
-      // 
-      // } 
-      
-      // if (numGuesses === 0) {
-      //   console.log("You are out of guesses!");
-      //   console.log("The word was " + secretWord);
-      //   secretWordIndex++; 
-      //   playGame(chooseSecretWord);
-      // 
-      // }
-      
-      // if (secretWordIndex > 9) {
-      //   console.log("game over, mate");
-      //   inAGame = false;
-      // }
-
-      numGuesses--;
-   
+      function setGameState () {
+        //check for existence of _ in the word
+        if (currentWord.toString().indexOf("_") === -1) {
+          console.log("You win!");
+          keepGuessing = false;
+        } 
+        
+        if (numGuesses === 0) {
+          console.log("You are out of guesses!");
+          console.log("The word was " + wordToGuess);
+          keepGuessing = false;
+        }
+        
+        
+      }
       getInput();
       
     });
   }
   
-
-  
-  // else {
-  //   console.log("game over, mate");
-  // 
-  //   var inAGame = false;
-  // }
 }
-//chooseRandomWord();
-startGame();
+
+playGame();
