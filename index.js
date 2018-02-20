@@ -21,7 +21,9 @@ function initializeGame() {
   
   initializePackage.hasRun = true;
   
-  var wordList = ["watermelon", "cauliflower", "pumpkin", "spinach", "lettuce", "celery", "broccoli", "strawberries", "mushrooms", "avocado"];
+  
+    var wordList = ["watermelon", "avocado"];
+  // var wordList = ["watermelon", "cauliflower", "pumpkin", "spinach", "lettuce", "celery", "broccoli", "strawberries", "mushrooms", "avocado"];
   var wordListReordered = [];
   
   for (var i = 0; i < 10; i++) {
@@ -39,12 +41,18 @@ function playGame() {
   }
   // TODO: when wordList is null, end game
   var wordList = initializePackage.wordListReordered.shift();
+  if (wordList.length < 1) {
+    console.log("You have guessed all the words. Hope you had a good visit to the farmer's market!");
+    return;
+  }
   var wordToGuess = wordList;
   currentWord = new Word(wordToGuess);
   numGuesses = wordToGuess.length + 2;
   usedLetters = [];
+  // console.log("usedLetters " + usedLetters);
   console.log("Here is your word: " + "\n" + currentWord.toString());
   getInput(currentWord, wordToGuess);
+
 }
 
 // function to choose a random word from the word list array without repeating any, and make a reordered list of words for each game
@@ -52,7 +60,7 @@ function playGame() {
 
 function getInput(currentWord, wordToGuess) {
   // only play if there are guesses left
-
+  
   if (numGuesses  > 0) {
     
     inquirer.prompt([
@@ -62,7 +70,7 @@ function getInput(currentWord, wordToGuess) {
         message: "Type a letter.",
         validate: function(value) {
           // make sure only English letters are entered
-          var pass = value.match(/([a-z])/gi);
+          var pass = (value.match(/([a-z])/gi));
           if (pass) {
             return true;
           }
@@ -73,10 +81,11 @@ function getInput(currentWord, wordToGuess) {
       }
     ]).then(function(userInput) {
       
-      //  console.log("currentWord is after function " + currentWord);
       // don't count letters that are already used
       if (usedLetters.indexOf(userInput.character) >= 0) {
         console.log("Letter already used. Try again.")
+        getInput(currentWord, wordToGuess);
+        //return;
       }
       // continue checking the letters for a match in the word
       else {
@@ -91,15 +100,19 @@ function getInput(currentWord, wordToGuess) {
         // capture return from function to determine where to put the letter in the array of already guessed letters.. may not need two arrays here
         usedLetters.push(userInput.character);
         console.log("used letters " + usedLetters);
-
+        
         numGuesses--;
-        setGameState(currentWord, numGuesses, wordToGuess);
-        // if (setGameState) {
-        //   playGame();
-        //   return;
-        // }
+        var gameState = setGameState(currentWord, numGuesses, wordToGuess);
+
+        if (gameState) {
+          playGame();
+          //return;
+        }
+        else {
+          getInput(currentWord, wordToGuess);
+        }
       }
-      getInput(currentWord, wordToGuess);
+      
     });
   }
 }
@@ -110,13 +123,15 @@ function setGameState(currentWord, numGuesses, wordToGuess) {
   
   if (currentWord.toString().indexOf("_") === -1) {
     console.log("You win!");
-    playGame();
+    //  playGame();
+    return true;
   } 
   // needs to be wordToGuess because currentWord is underscores
   if (numGuesses === 0) {
     console.log("You are out of guesses!");
-  console.log("The word was " + wordToGuess);
-  playGame();
+    console.log("The word was " + wordToGuess);
+    //  playGame();
+    return true;
   }
 }
 
