@@ -9,12 +9,10 @@ var Word = require("./word.js");
 
 // set the number of guesses to the the number of characters in the word and two extras for incorrect letters
 
-
 var initializePackage = {
   hasRun: false
 };
-var wrongLetters = [];
-var correctLetters = [];
+var usedLetters = [];
 var numGuesses;
 
 function initializeGame() {
@@ -44,16 +42,15 @@ function playGame() {
   var wordToGuess = wordList;
   currentWord = new Word(wordToGuess);
   numGuesses = wordToGuess.length + 2;
-  wrongLetters = [];
-  correctLetters = [];
+  usedLetters = [];
   console.log("Here is your word: " + "\n" + currentWord.toString());
-  getInput(currentWord);
+  getInput(currentWord, wordToGuess);
 }
 
 // function to choose a random word from the word list array without repeating any, and make a reordered list of words for each game
 
 
-function getInput(currentWord) {
+function getInput(currentWord, wordToGuess) {
   // only play if there are guesses left
 
   if (numGuesses  > 0) {
@@ -78,7 +75,7 @@ function getInput(currentWord) {
       
       //  console.log("currentWord is after function " + currentWord);
       // don't count letters that are already used
-      if ((correctLetters.indexOf(userInput.character) >= 0) || (wrongLetters.indexOf(userInput.character) >= 0)) {
+      if (usedLetters.indexOf(userInput.character) >= 0) {
         console.log("Letter already used. Try again.")
       }
       // continue checking the letters for a match in the word
@@ -91,42 +88,35 @@ function getInput(currentWord) {
         
         console.log(currentWord.toString());
         
-        // capture return from function to determine where to put the letter in the arrays of already guessed letters.. may not need two arrays here
-        var isGuessCorrect = currentWord.guessLetter(userInput.character);
-        
-        if (isGuessCorrect) {
-          correctLetters.push(userInput.character);
-          console.log("correct letters " + correctLetters);
-        }
-        
-        else  {
-          wrongLetters.push(userInput.character);
-          console.log("wrong letters " + wrongLetters);
-        }
+        // capture return from function to determine where to put the letter in the array of already guessed letters.. may not need two arrays here
+        usedLetters.push(userInput.character);
+        console.log("used letters " + usedLetters);
+
         numGuesses--;
-        setGameState(currentWord, numGuesses);
+        setGameState(currentWord, numGuesses, wordToGuess);
         // if (setGameState) {
         //   playGame();
         //   return;
         // }
       }
-      getInput(currentWord);
+      getInput(currentWord, wordToGuess);
     });
   }
 }
 //TODO - figure out why the second round has duplicate prompt text
 
-function setGameState(currentWord, numGuesses) {
+function setGameState(currentWord, numGuesses, wordToGuess) {
   //check for existence of _ in the word
+  
   if (currentWord.toString().indexOf("_") === -1) {
     console.log("You win!");
-    return true;
+    playGame();
   } 
   // needs to be wordToGuess because currentWord is underscores
   if (numGuesses === 0) {
     console.log("You are out of guesses!");
-  //  console.log("The word was " + wordToGuess);
-    return true;
+  console.log("The word was " + wordToGuess);
+  playGame();
   }
 }
 
