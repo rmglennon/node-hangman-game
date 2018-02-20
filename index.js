@@ -1,6 +1,7 @@
 // import packages and dependencies; initialize global variables
 var inquirer = require("inquirer");
 var Word = require("./word.js");
+var chalk = require("chalk");
 
 var initializePackage = {
   hasRun: false
@@ -11,7 +12,16 @@ var numGuesses;
 // function to initialize the game and randomize the list of words. This should only run the very first time.
 function initializeGame() {
   
-  console.log("Time to play Hangman! \nFill in all the letters in the word before you run out of guesses! \nThe words are related to produce you can find at a farmer's market.")
+//   figlet("Farmer's Market", function(err, data) {
+//     if (err) {
+//         console.log("Sorry, an error has occurred.");
+//         console.dir(err);
+//         return;
+//     }
+//     console.log(data)
+// });
+  
+  console.log("\nTime to play Hangman! \nFill in all the letters in the word before you run out of guesses! \nThe words are related to produce you can find at a farmer's market.")
   
   initializePackage.hasRun = true;
   
@@ -54,7 +64,8 @@ function playGame() {
   usedLetters = [];
   
   // start the game and display the word to guess
-  console.log("Here is your word: " + "\n" + currentWord.toString());
+  console.log(chalk.blue.bold("\n" + "Here is your word: " + "\n")); console.log(chalk.bold.red(currentWord.toString() + "\n"));
+  console.log(chalk.green.italic("Guesses remaining: " + numGuesses  + "\n"));
   getInput(currentWord, wordToGuess);
   
 }
@@ -85,26 +96,26 @@ function getInput(currentWord, wordToGuess) {
       
       // do not count letters that are already used
       if (usedLetters.indexOf(userInput.character) >= 0) {
-        console.log("Letter already used. Try again.")
+        console.log(chalk.blue("\n" + "Letter already used. Try again." + "\n"));
         getInput(currentWord, wordToGuess);
-        
       }
       
       // continue checking the letters for a match in the word
       else {
         
         // userInput returns an object, so need to send its .character property to check if the letter is in the word
+        numGuesses--;
+
         currentWord.guessLetter(userInput.character);
         
-        console.log("Guesses remaining: " + numGuesses);
-        
-        console.log(currentWord.toString());
-        
+        console.log("\n" + chalk.bold.red(currentWord.toString() + "\n"));
+        console.log(chalk.green.italic("Guesses remaining: " + numGuesses + "\n"));
         // capture return from function to add the letter to the list of already guessed letters.
         usedLetters.push(userInput.character);
-        console.log("Used letters: " + usedLetters);
+
+        console.log(chalk.green.italic("Used letters: " + usedLetters  + "\n"));
         
-        numGuesses--;
+
         
         // check whether to end the round. If so, then call the reset function; otherwise, use recursion to continue guessing this word.
         var gameState = setGameState(currentWord, numGuesses, wordToGuess);
@@ -125,13 +136,14 @@ function setGameState(currentWord, numGuesses, wordToGuess) {
   
   //check for existence of _ in the word, which means it is unsolved. If no _ are found, then the round should end.
   if (currentWord.toString().indexOf("_") === -1) {
-    console.log("You win!");
+    console.log(chalk.blue("You win! The word was " + wordToGuess + ".\n"));
+    console.log("------------------------------------");
     return true;
   } 
   // if there are no guesses left, the round should end. This needs to be wordToGuess because currentWord is underscores.
   if (numGuesses === 0) {
-    console.log("You are out of guesses!");
-    console.log("The word was " + wordToGuess);
+    console.log(chalk.blue("You are out of guesses! The word was " + wordToGuess + ".\n"));
+    console.log("------------------------------------");
     return true;
   }
 }

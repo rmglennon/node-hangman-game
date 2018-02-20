@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/rmglennon/node-hangman-game/issues"
   },
-  "homepage": "https://github.com/rmglennon/node-hangman-game#readme"
+  "homepage": "https://github.com/rmglennon/node-hangman-game#readme",
+  "dependencies": {
+    "chalk": "^2.3.1"
+  }
 }
