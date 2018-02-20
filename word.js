@@ -14,8 +14,10 @@ var Word = function(currentWord) {
 //A function that returns a string representing the word. This should call the function on each letter object (the first function defined in Letter.js) that displays the character or an underscore and concatenate those together.
 Word.prototype.toString = function() {
   var str = "";
+  
+  // puts a space between letters 
   this.lettersArray.forEach(function(value) {
-    str = str + value.toString(); 
+    str = str + " " + value.toString(); 
   });
   return str;
 };
