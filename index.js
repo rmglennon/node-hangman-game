@@ -1,4 +1,4 @@
-// include packages and dependencies; initialize global variables
+// import packages and dependencies; initialize global variables
 var inquirer = require("inquirer");
 var Word = require("./word.js");
 

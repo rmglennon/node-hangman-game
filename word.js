@@ -1,28 +1,32 @@
 var Letter = require("./letter.js");
 
-// Word.js: Contains a constructor, Word that depends on the Letter constructor. This is used to create an object representing the current word the user is attempting to guess. That means the constructor should define:
+// Constructor to create an object representing the current word the user is attempting to guess. 
 
+// function to create an array of new Letter objects in the word
 var Word = function(currentWord) {
-  // An array of new Letter objects representing the letters of the underlying word
+  
   this.word = currentWord;
-  this.wordSplit = this.word.split(""); //split on each letter
+  // split the word on each letter
+  this.wordSplit = this.word.split("");
+  // returns a new array of letters
   this.lettersArray = this.wordSplit.map(function(value){
-    return new Letter(value); //takes an array and returns new array of letters 
+    return new Letter(value); 
   });
 }
 
-//A function that returns a string representing the word. This should call the function on each letter object (the first function defined in Letter.js) that displays the character or an underscore and concatenate those together.
+// function to displays the character or an underscore in the word being guessed
 Word.prototype.toString = function() {
   var str = "";
   
-  // puts a space between letters 
+  // " " puts a space between letters so it is easier to reaad
   this.lettersArray.forEach(function(value) {
     str = str + " " + value.toString(); 
   });
   return str;
 };
 
-
+// determines whether the letter is correct by calling Letter's function to check if the input character is the same as the letter in the word.
+// this does not just return true immediately in case if there are two of the same letter in a word
 Word.prototype.guessLetter = function(character) {
   var isGuessCorrect = false;
   for (var i = 0; i < this.lettersArray.length; i++) {
@@ -33,6 +37,5 @@ Word.prototype.guessLetter = function(character) {
   return isGuessCorrect;
 };
 
-// don't just return true in case if there are two of the same letter
-
+// export Word for use in other files
 module.exports = Word;
