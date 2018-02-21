@@ -12,21 +12,13 @@ var numGuesses;
 // function to initialize the game and randomize the list of words. This should only run the very first time.
 function initializeGame() {
   
-//   figlet("Farmer's Market", function(err, data) {
-//     if (err) {
-//         console.log("Sorry, an error has occurred.");
-//         console.dir(err);
-//         return;
-//     }
-//     console.log(data)
-// });
-  
   console.log("\nTime to play Hangman! \nFill in all the letters in the word before you run out of guesses! \nThe words are related to produce you can find at a farmer's market.")
   
   initializePackage.hasRun = true;
   
   // shuffle the list of words into a new, reordered array
   var wordList = ["watermelon", "cauliflower", "pumpkin", "spinach", "lettuce", "celery", "broccoli", "strawberries", "mushrooms", "avocado"];
+  
   var wordListReordered = [];
   for (var i = 0; i < 10; i++) {
     var randomIndex = Math.floor(Math.random() * wordList.length);
@@ -49,9 +41,9 @@ function playGame() {
   // grab the first word from the list
   var wordList = initializePackage.wordListReordered.shift();
   
-  // end the game if there are no words left in the list
-  if (wordList.length < 1) {
-    console.log("You have guessed all the words. Hope you had a good visit to the farmer's market!");
+  // end the game if there are no words left
+  if ((wordList === undefined) || (!wordList.length)) {
+    console.log("\nYou have guessed all the words. \nHope you had a good visit to the farmer's market!\n");
     return;
   }
   
@@ -105,17 +97,15 @@ function getInput(currentWord, wordToGuess) {
         
         // userInput returns an object, so need to send its .character property to check if the letter is in the word
         numGuesses--;
-
+        
         currentWord.guessLetter(userInput.character);
         
         console.log("\n" + chalk.bold.red(currentWord.toString() + "\n"));
         console.log(chalk.green.italic("Guesses remaining: " + numGuesses + "\n"));
         // capture return from function to add the letter to the list of already guessed letters.
         usedLetters.push(userInput.character);
-
-        console.log(chalk.green.italic("Used letters: " + usedLetters  + "\n"));
         
-
+        console.log(chalk.green.italic("Used letters: " + usedLetters  + "\n"));
         
         // check whether to end the round. If so, then call the reset function; otherwise, use recursion to continue guessing this word.
         var gameState = setGameState(currentWord, numGuesses, wordToGuess);
